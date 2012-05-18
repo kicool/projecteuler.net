@@ -1,0 +1,4 @@
+#!/bin/bash
+#http://primes.utm.edu/
+
+for i in `seq 1 50`; do wget http://primes.utm.edu/lists/small/millions/primes$i.zip; done
