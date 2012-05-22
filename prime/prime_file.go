@@ -91,20 +91,19 @@ func NewPrimeStore2(file string) (ps *PrimeStore, err error) {
 		return nil, err
 	}
 
-	c := 1000001
+	c := 1000000
 	ps.index = make([]uint64, c, c)
 	ps.count = 0
 	for i := uint64(0); i < uint64(len(buf)); i++ {
 		v, j := nextUint64(buf, i)
-		if i != j {
+		if v != 0 {
 			ps.index[ps.count] = v
 			ps.count++
 		}
 		i = j
 	}
-	ps.count--
-	ps.index = ps.index[:ps.count]
 
+	ps.index = ps.index[:ps.count]
 	ps.itoa()
 
 	ps.first = ps.index[0]
@@ -129,7 +128,7 @@ func NewPrimeStore3(file string) (ps *PrimeStore, err error) {
 
 	for i := uint64(0); i < uint64(len(buf)); i++ {
 		v, j := nextUint64(buf, i)
-		if i != j {
+		if v != 0 {
 			ps.index = append(ps.index, v)
 		}
 		i = j
@@ -218,7 +217,7 @@ func (ps *PrimeStore) GetPandigitalLargest() (n uint64) {
 }
 
 func (ps *PrimeStore) String() string {
-	return fmt.Sprint("bsae,count,first,last,low,high=", ps.base, ps.count, ps.first, ps.last, ps.low, ps.high)
+	return fmt.Sprint("base,count,first,last,low,high=", ps.base, ps.count, ps.first, ps.last, ps.low, ps.high)
 }
 
 func isDigit(b byte) bool {
@@ -336,7 +335,17 @@ func main() {
 		fmt.Println(ps.IsPrime(101))
 	*/
 
+	fmt.Println(ps)
+	fmt.Println(ps2)
+	fmt.Println(ps3)
+
 	fmt.Println(ps.GetPandigitalLargest())
 	fmt.Println(ps2.GetPandigitalLargest())
 	fmt.Println(ps3.GetPandigitalLargest())
+	fmt.Println(ps.IsPrime(3))
+	fmt.Println(ps2.IsPrime(3))
+	fmt.Println(ps3.IsPrime(3))
+	fmt.Println(ps.IsPrime(100001))
+	fmt.Println(ps2.IsPrime(100001))
+	fmt.Println(ps3.IsPrime(100001))
 }
