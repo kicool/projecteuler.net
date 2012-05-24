@@ -222,16 +222,21 @@ func (ps *PrimeStore) String() string {
 	return fmt.Sprint("base,count,first,last,low,high=", ps.base, ps.count, ps.first, ps.last, ps.low, ps.high)
 }
 
-func isDigit(b byte) bool {
-	return '0' <= b && b <= '9'
-}
-
 func nextUint64(b []byte, i uint64) (uint64, uint64) {
-	for ; i < uint64(len(b)) && !isDigit(b[i]); i++ {
+	l := uint64(len(b))
+	for ; i < l; i++ {
+		c := b[i] - '0'
+		if c >= 0 && c <= 9 { //isDigit
+			break
+		}
 	}
 	x := uint64(0)
-	for ; i < uint64(len(b)) && isDigit(b[i]); i++ {
-		x = x*10 + uint64(b[i]) - '0'
+	for ; i < l; i++ {
+		c := b[i] - '0'
+		if c < 0 || c > 9 { //notDigit
+			break
+		}
+		x = x*10 + uint64(c)
 	}
 	return x, i
 }
