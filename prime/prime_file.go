@@ -8,10 +8,10 @@ import (
 	"log"
 	_ "net/http/pprof"
 	"os"
-	"regexp"
 	"runtime/pprof"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -67,9 +67,11 @@ func NewPrimeStore(file string) (ps *PrimeStore, err error) {
 
 	ps.atoi()
 
-	if !ps.validate() {
-		return nil, errors.New("Invalidate: unsorted")
-	}
+	/*
+		if !ps.validate() {
+			return nil, errors.New("Invalidate: unsorted")
+		}
+	*/
 
 	ps.first = ps.index[0]
 	ps.last = ps.index[ps.count-1]
@@ -243,8 +245,7 @@ func (ps *PrimeStore) loadFromFile() (err error) {
 		return err
 	}
 
-	reg := regexp.MustCompile("[0-9]+")
-	ps.store = reg.FindAllString(string(file), len(string(file)))
+	ps.store = strings.Fields(string(file))
 
 	ps.count = uint64(len(ps.store))
 	ps.base = 1 //TODO:base my update by file content in fact
